@@ -1,291 +1,536 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>STIVO DEVX STUDIO | Solutions Tech & Cybersécurité</title>
-  <meta name="description" content="Studio d'innovation technologique spécialisé en développement, cybersécurité et solutions digitales avancées. Rejoignez notre communauté d'experts.">
-  <meta name="keywords" content="développement, cybersécurité, tech, STIVO DEVX, hacking éthique, communauté tech">
-  
-  <!-- Fonts & Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  
-  <!-- Styles -->
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STIVO DEVX STUDIO</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+            --primary-color: #007bff;       /* ← couleur changeable via picker */
+            --secondary-color: #f8f9fa;
+            --accent-color: #6c757d;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        .dark-mode {
+            --bg-color: #121212;
+            --text-color: #ffffff;
+            --secondary-color: #1e1e1e;
+            --accent-color: #adb5bd;
+            --shadow: rgba(255, 255, 255, 0.08);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: var(--bg-color);
+            color: var(--text-color);
+            transition: var(--transition);
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: var(--secondary-color);
+            box-shadow: 0 2px 10px var(--shadow);
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0.9rem 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.8rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .right-nav {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Toggle thème icône (soleil / lune) */
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.55rem;
+            color: var(--text-color);
+            position: relative;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.4s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.12);
+        }
+
+        .sun, .moon {
+            position: absolute;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .sun {
+            opacity: 1;
+            transform: rotate(0deg);
+        }
+
+        .dark-mode .sun {
+            opacity: 0;
+            transform: rotate(-120deg);
+        }
+
+        .moon {
+            opacity: 0;
+            transform: rotate(120deg);
+        }
+
+        .dark-mode .moon {
+            opacity: 1;
+            transform: rotate(0deg);
+        }
+
+        /* Picker couleur rond */
+        .color-picker {
+            width: 38px;
+            height: 38px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            padding: 0;
+            background: transparent;
+            box-shadow: 0 0 0 2px var(--primary-color) inset;
+        }
+
+        .hamburger {
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        /* Menu mobile */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 82%;
+            max-width: 340px;
+            height: 100%;
+            background: var(--secondary-color);
+            box-shadow: 3px 0 20px var(--shadow);
+            transition: left 0.35s ease;
+            z-index: 999;
+            padding-top: 4.5rem;
+        }
+
+        .mobile-menu.active {
+            left: 0;
+        }
+
+        .mobile-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .mobile-menu li {
+            padding: 1.1rem 1.8rem;
+            border-bottom: 1px solid rgba(150,150,150,0.12);
+        }
+
+        .mobile-menu a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-size: 1.15rem;
+            display: block;
+        }
+
+        .mobile-theme-group {
+            padding: 1.4rem 1.8rem;
+            border-top: 1px solid rgba(150,150,150,0.12);
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s;
+            z-index: 998;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* Hero & sections */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-color) 0%, #4dabf7 100%);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1.2rem;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            max-width: 680px;
+            margin: 0 auto 2.2rem;
+        }
+
+        .cta {
+            display: inline-block;
+            padding: 1rem 2.4rem;
+            background: white;
+            color: var(--primary-color);
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 50px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+            transition: var(--transition);
+        }
+
+        .cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+        }
+
+        .section {
+            padding: 6rem 1rem 4rem;
+            max-width: 1240px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.4rem;
+            margin-bottom: 3rem;
+            color: var(--primary-color);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.8rem;
+        }
+
+        .card {
+            background: var(--secondary-color);
+            padding: 2rem;
+            border-radius: 14px;
+            text-align: center;
+            box-shadow: 0 5px 18px var(--shadow);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 28px var(--shadow);
+        }
+
+        .card i {
+            font-size: 3.2rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card p {
+            margin-bottom: 1.5rem;
+        }
+
+        .card a {
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .card a:hover {
+            color: var(--accent-color);
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 1rem;
+            background: var(--secondary-color);
+            color: var(--accent-color);
+        }
+
+        .animate-in {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+
+        .animate-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hamburger { display: block; }
+            .section { padding-top: 8rem; }
+            .hero h1 { font-size: 2.3rem; }
+            .hero p { font-size: 1.1rem; }
+        }
+    </style>
 </head>
 <body>
 
-  <!-- Navigation Professionnelle -->
-  <nav class="navbar">
-    <div class="nav-container">
-      <a href="#" class="brand">
-        <img src="https://i.postimg.cc/cJD6rnkp/7d6bffcd-5aed-49a3-a921-5a6d53b9888c.jpg" alt="STIVO DEVX Logo" class="brand-logo">
-        <span class="brand-text">STIVO DEVX STUDIO</span>
-      </a>
-      <div class="nav-links">
-        <a href="#accueil" class="nav-link">Accueil</a>
-        <a href="#plateformes" class="nav-link">Plateformes</a>
-        <a href="#a-propos" class="nav-link">À Propos</a>
-        <a href="#services" class="nav-link">Services</a>
-        <a href="#contact" class="nav-link">Contact</a>
-        <a href="https://github.com/STIVE-DEVX" class="cta-button" target="_blank">
-          <i class="fab fa-github"></i> Explorer GitHub
-        </a>
-      </div>
-    </div>
-  </nav>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">STIVO DEVX</div>
 
-  <!-- Hero Section -->
-  <section class="hero" id="accueil">
-    <div class="hero-content animate-in">
-      <h1>STIVO DEVX STUDIO</h1>
-      <p class="hero-subtitle">
-        Pionnier des solutions technologiques avancées. Notre communauté rassemble développeurs,
-        experts en cybersécurité et innovateurs passionnés. Connectez-vous à l'écosystème tech de demain.
-      </p>
-      <div style="margin-top: 3rem;">
-        <a href="#plateformes" class="cta-button" style="margin-right: 1rem;">
-          <i class="fas fa-rocket"></i> Rejoindre la Communauté
-        </a>
-        <a href="#contact" class="platform-btn" style="width: auto; display: inline-flex;">
-          <i class="fas fa-envelope"></i> Nous Contacter
-        </a>
-      </div>
-    </div>
-  </section>
+            <div class="nav-links">
+                <a href="#home">Accueil</a>
+                <a href="#platforms">Plateformes</a>
+                <a href="#tools">Outils</a>
+                <a href="#services">Services</a>
+                <a href="#bot">Bot</a>
+            </div>
 
-  <!-- Plateformes Section -->
-  <section class="platforms-section" id="plateformes">
-    <h2 class="section-title animate-in">Nos Plateformes Communautaires</h2>
-    <p style="text-align: center; color: var(--text-secondary); margin-bottom: 3rem; max-width: 700px; margin-left: auto; margin-right: auto;" class="animate-in delay-1">
-      Connectez-vous avec nous sur toutes les plateformes. Chaque communauté offre un contenu unique et des opportunités de networking.
-    </p>
-    <div class="platforms-grid-pro">
+            <div class="right-nav">
+                <div class="theme-group">
+                    <button class="theme-toggle" id="theme-toggle" aria-label="Changer thème">
+                        <i class="fas fa-sun sun"></i>
+                        <i class="fas fa-moon moon"></i>
+                    </button>
+                    <input type="color" class="color-picker" id="color-picker" value="#007bff">
+                </div>
 
-      <!-- WhatsApp Channel -->
-      <div class="platform-card-pro animate-in delay-1">
-        <div class="platform-icon">
-          <i class="fab fa-whatsapp"></i>
+                <i class="fas fa-bars hamburger" id="hamburger"></i>
+            </div>
         </div>
-        <h3 class="platform-name-pro">WhatsApp Channel</h3>
-        <p class="platform-handle-pro">CYBER ZONE PRO & TECH RÉSEAU</p>
-        <p class="platform-description">Annonces exclusives, mises à jour tech et ressources partagées en temps réel.</p>
-        <a href="https://whatsapp.com/channel/0029Vb6nKuV8vd1M1iBlWe2l" class="platform-btn" target="_blank">
-          <i class="fas fa-external-link-alt"></i> S'abonner au Channel
-        </a>
-      </div>
+    </nav>
 
-      <!-- Telegram -->
-      <div class="platform-card-pro animate-in delay-2">
-        <div class="platform-icon">
-          <i class="fab fa-telegram"></i>
-        </div>
-        <h3 class="platform-name-pro">Telegram</h3>
-        <p class="platform-handle-pro">TEAM HACKER STIVO</p>
-        <p class="platform-description">Discussions techniques avancées, partage de code et collaborations.</p>
-        <a href="https://t.me/teamhackerstivo" class="platform-btn" target="_blank">
-          <i class="fas fa-external-link-alt"></i> Rejoindre le Groupe
-        </a>
-      </div>
-
-      <!-- GitHub -->
-      <div class="platform-card-pro animate-in delay-3">
-        <div class="platform-icon">
-          <i class="fab fa-github"></i>
-        </div>
-        <h3 class="platform-name-pro">GitHub</h3>
-        <p class="platform-handle-pro">STIVO DEVX</p>
-        <p class="platform-description">Projets open-source, outils de développement et contributions communautaires.</p>
-        <a href="https://github.com/STIVE-DEVX" class="platform-btn" target="_blank">
-          <i class="fas fa-external-link-alt"></i> Explorer les Projets
-        </a>
-      </div>
-
-      <!-- YouTube -->
-      <div class="platform-card-pro animate-in delay-4">
-        <div class="platform-icon">
-          <i class="fab fa-youtube"></i>
-        </div>
-        <h3 class="platform-name-pro">YouTube</h3>
-        <p class="platform-handle-pro">CYBERZONE PRO TECH</p>
-        <p class="platform-description">Tutoriels, démonstrations tech et analyses de sécurité informatique.</p>
-        <a href="https://youtube.com/@cyberzoneprotechreseau" class="platform-btn" target="_blank">
-          <i class="fas fa-external-link-alt"></i> S'abonner
-        </a>
-      </div>
-
-      <!-- X (Twitter) -->
-      <div class="platform-card-pro animate-in delay-1">
-        <div class="platform-icon">
-          <i class="fab fa-twitter"></i>
-        </div>
-        <h3 class="platform-name-pro">X (Twitter)</h3>
-        <p class="platform-handle-pro">@stivotech2</p>
-        <p class="platform-description">Actualités tech, thoughts leadership et networking professionnel.</p>
-        <a href="https://x.com/stivotech2" class="platform-btn" target="_blank">
-          <i class="fas fa-external-link-alt"></i> Suivre
-        </a>
-      </div>
-
-      <!-- Instagram -->
-      <div class="platform-card-pro animate-in delay-2">
-        <div class="platform-icon">
-          <i class="fab fa-instagram"></i>
-        </div>
-        <h3 class="platform-name-pro">Instagram</h3>
-        <p class="platform-handle-pro">@stivo_tech2</p>
-        <p class="platform-description">Contenu visuel, stories quotidiennes et insights de l'industrie.</p>
-        <a href="https://www.instagram.com/stivo_tech2/" class="platform-btn" target="_blank">
-          <i class="fas fa-external-link-alt"></i> Suivre
-        </a>
-      </div>
-
-      <!-- Facebook -->
-      <div class="platform-card-pro animate-in delay-3">
-        <div class="platform-icon">
-          <i class="fab fa-facebook"></i>
-        </div>
-        <h3 class="platform-name-pro">Facebook</h3>
-        <p class="platform-handle-pro">STIVO TECH</p>
-        <p class="platform-description">Événements communautaires, groupes de discussion et ressources partagées.</p>
-        <a href="https://www.facebook.com/profile.php?id=61586513012219" class="platform-btn" target="_blank">
-          <i class="fas fa-external-link-alt"></i> Suivre la Page
-        </a>
-      </div>
-
-      <!-- WhatsApp Group -->
-      <div class="platform-card-pro animate-in delay-4">
-        <div class="platform-icon">
-          <i class="fas fa-users"></i>
-        </div>
-        <h3 class="platform-name-pro">WhatsApp Group</h3>
-        <p class="platform-handle-pro">TEAM BLACK HAT</p>
-        <p class="platform-description">Discussion en temps réel, support communautaire et échanges rapides.</p>
-        <a href="https://chat.whatsapp.com/H5CUUaqYNJA0mxROdkp1HI" class="platform-btn" target="_blank">
-          <i class="fas fa-external-link-alt"></i> Rejoindre le Groupe
-        </a>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Stats Section -->
-  <section class="stats-section animate-in">
-    <div class="stats-grid">
-      <div class="stat-item">
-        <div class="stat-number">5000+</div>
-        <p>Membres Communauté</p>
-      </div>
-      <div class="stat-item">
-        <div class="stat-number">50+</div>
-        <p>Projets Open Source</p>
-      </div>
-      <div class="stat-item">
-        <div class="stat-number">8</div>
-        <p>Plateformes Actives</p>
-      </div>
-      <div class="stat-item">
-        <div class="stat-number">24/7</div>
-        <p>Support Communauté</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- À Propos Section -->
-  <section class="platforms-section" id="a-propos">
-    <h2 class="section-title animate-in">À Propos de STIVO DEVX</h2>
-    <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-      <p style="margin-bottom: 2rem; font-size: 1.1rem;" class="animate-in delay-1">
-        CYBER ZONE PRO & TECH RÉSEAU
- est une organisation d'innovation technologique focalisée sur le développement de solutions avancées,
-        la cybersécurité et la création d'écosystèmes communautaires robustes. Nous croyons en la puissance de la collaboration
-        pour repousser les limites de la technologie.
-      </p>
-      <div class="animate-in delay-2">
-        <h3 style="margin-bottom: 1rem; color: white;">Nos Valeurs</h3>
-        <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
-          <span style="background: rgba(0, 102, 255, 0.1); padding: 0.5rem 1rem; border-radius: 20px; border: 1px solid rgba(0, 102, 255, 0.3);">
-            Innovation Continue
-          </span>
-          <span style="background: rgba(0, 212, 170, 0.1); padding: 0.5rem 1rem; border-radius: 20px; border: 1px solid rgba(0, 212, 170, 0.3);">
-            Transparence Totale
-          </span>
-          <span style="background: rgba(255, 255, 255, 0.1); padding: 0.5rem 1rem; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.3);">
-            Excellence Technique
-          </span>
-          <span style="background: rgba(102, 0, 255, 0.1); padding: 0.5rem 1rem; border-radius: 20px; border: 1px solid rgba(102, 0, 255, 0.3);">
-            Communauté First
-          </span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer Pro -->
-  <footer class="footer-pro" id="contact">
-    <div class="footer-content">
-      <div class="footer-section">
-        <h3>STIVO DEVX STUDIO</h3>
-        <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
-          Votre partenaire en innovation technologique et développement communautaire.
-        </p>
-        <div class="social-grid">
-          <a href="https://github.com/STIVE-DEVX" class="social-icon" target="_blank">
-            <i class="fab fa-github"></i>
-          </a>
-          <a href="https://x.com/stivotech2" class="social-icon" target="_blank">
-            <i class="fab fa-twitter"></i>
-          </a>
-          <a href="https://www.facebook.com/techdroidp" class="social-icon" target="_blank">
-            <i class="fab fa-linkedin"></i>
-          </a>
-          <a href="https://t.me/techdevform" class="social-icon">
-            <i class="fas fa-envelope"></i>
-          </a>
-        </div>
-      </div>
-
-      <div class="footer-section">
-        <h3>Liens Rapides</h3>
-        <ul class="footer-links">
-          <li><a href="#accueil">Accueil</a></li>
-          <li><a href="#plateformes">Plateformes</a></li>
-          <li><a href="#a-propos">À Propos</a></li>
-          <li><a href="#services">Services</a></li>
-          <li><a href="#contact">Contact</a></li>
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="#home">Accueil</a></li>
+            <li><a href="#platforms">Plateformes</a></li>
+            <li><a href="#tools">Outils</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#bot">Bot</a></li>
         </ul>
-      </div>
 
-      <div class="footer-section">
-        <h3>Plateformes Principales</h3>
-        <ul class="footer-links">
-          <li><a href="https://github.com/STIVE-DEVX" target="_blank">GitHub</a></li>
-          <li><a href="https://t.me/teamhackerstivo" target="_blank">Telegram</a></li>
-          <li><a href="https://whatsapp.com/channel/0029Vb6nKuV8vd1M1iBlWe2l" target="_blank">WhatsApp Channel</a></li>
-          <li><a href="https://youtube.com/@cyberzoneprotechreseau" target="_blank">YouTube</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-section">
-        <h3>Contact & Support</h3>
-        <ul class="footer-links">
-          <li><a href="https://www.facebook.com/techdroidp">Email Professionnel</a></li>
-          <li><a href="https://chat.whatsapp.com/LhHI6OgkcrHLtSdFi7Jtj9" target="_blank">Support WhatsApp</a></li>
-          <li><a href="https://t.me/teamhackerstivo" target="_blank">Support Telegram</a></li>
-          <li><a href="#">Documentation</a></li>
-        </ul>
-      </div>
-
+        <div class="mobile-theme-group">
+            <button class="theme-toggle" id="mobile-theme-toggle" aria-label="Changer thème">
+                <i class="fas fa-sun sun"></i>
+                <i class="fas fa-moon moon"></i>
+            </button>
+            <input type="color" class="color-picker" id="mobile-color" value="#007bff">
+        </div>
     </div>
 
-    <div class="copyright">
-      <p>© 2025 STIVO DEVX STUDIO. Tous droits réservés.</p>
-      <p style="margin-top: 0.5rem; font-size: 0.8rem;"></p>
-    </div>
-  </footer>
+    <div class="overlay" id="overlay"></div>
 
-  <!-- Script -->
-  <script src="script.js"></script>
+    <!-- HERO -->
+    <section id="home" class="hero">
+        <div class="hero-content animate-in">
+            <h1>STIVO DEVX STUDIO</h1>
+            <p>Plateforme technologique réunissant développeurs, outils web et communautés tech.</p>
+            <a href="#platforms" class="cta">Explorer les Plateformes</a>
+        </div>
+    </section>
+
+    <!-- PLATEFORMES -->
+    <section id="platforms" class="section">
+        <h2 class="section-title animate-in">Nos Plateformes</h2>
+        <div class="grid">
+            <div class="card animate-in">
+                <i class="fab fa-github"></i>
+                <h3>GitHub</h3>
+                <p>Projets open source STIVO DEVX</p>
+                <a href="https://github.com/STIVE-DEVX" target="_blank">Explorer</a>
+            </div>
+            <div class="card animate-in">
+                <i class="fab fa-telegram"></i>
+                <h3>Telegram</h3>
+                <p>Communauté technique</p>
+                <a href="https://t.me/teamhackerstivo" target="_blank">Rejoindre</a>
+            </div>
+            <div class="card animate-in">
+                <i class="fab fa-youtube"></i>
+                <h3>YouTube</h3>
+                <p>Tutoriels cybersécurité</p>
+                <a href="https://youtube.com/@cyberzoneprotechreseau" target="_blank">Voir</a>
+            </div>
+            <div class="card animate-in">
+                <i class="fab fa-instagram"></i>
+                <h3>Instagram</h3>
+                <p>Actualités tech</p>
+                <a href="https://www.instagram.com/stivo_tech2/" target="_blank">Suivre</a>
+            </div>
+            <div class="card animate-in">
+                <i class="fab fa-twitter"></i>
+                <h3>X / Twitter</h3>
+                <p>Réseau professionnel</p>
+                <a href="https://x.com/stivotech2" target="_blank">Suivre</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- OUTILS -->
+    <section id="tools" class="section">
+        <h2 class="section-title animate-in">Outils STIVO TECH</h2>
+        <div class="grid">
+            <div class="card animate-in">
+                <h3>STIVO Tech Unban</h3>
+                <p>Déban WhatsApp</p>
+                <a href="https://www-stivo-tech-unban.vercel.app/" target="_blank">Accéder</a>
+            </div>
+            <div class="card animate-in">
+                <h3>WhatsApp UBAN Tool</h3>
+                <p>Gestion ban WhatsApp</p>
+                <a href="https://whatsappnumberbantool.vercel.app" target="_blank">Accéder</a>
+            </div>
+            <div class="card animate-in">
+                <h3>Unban WhatsApp Pro</h3>
+                <p>Service professionnel</p>
+                <a href="https://www-wp-unban-pro.onrender.com" target="_blank">Accéder</a>
+            </div>
+            <div class="card animate-in">
+                <h3>STIVO Unban Web</h3>
+                <p>Interface web</p>
+                <a href="https://stivo-unban-web.onrender.com" target="_blank">Accéder</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section id="services" class="section">
+        <h2 class="section-title animate-in">Autres Services</h2>
+        <div class="grid">
+            <div class="card animate-in">
+                <h3>Aviator Prediction</h3>
+                <p>Prédictions Aviator</p>
+                <a href="https://aviator-prediction-one.vercel.app" target="_blank">Accéder</a>
+            </div>
+            <div class="card animate-in">
+                <h3>Service Plus Cameroon</h3>
+                <p>Codes USSD réseau</p>
+                <a href="https://wwwservicepluscameroon.vercel.app" target="_blank">Accéder</a>
+            </div>
+            <div class="card animate-in">
+                <h3>APK Hub Download</h3>
+                <p>Téléchargement APK</p>
+                <a href="https://apkhubdownload.vercel.app" target="_blank">Accéder</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- BOT -->
+    <section id="bot" class="section">
+        <h2 class="section-title animate-in">Créer ton Bot WhatsApp</h2>
+        <div class="grid">
+            <div class="card animate-in">
+                <h3>ZENTROX BOT MD</h3>
+                <p>Bot WhatsApp Multi Device</p>
+                <a href="https://github.com/STIVE-DEVX/ZENTROX-BOT-MD-V1.1" target="_blank">Voir GitHub</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 STIVO DEVX STUDIO</p>
+    </footer>
+
+    <script>
+        // Menu burger
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const overlay = document.getElementById('overlay');
+
+        hamburger.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+            overlay.classList.toggle('active');
+        });
+
+        overlay.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+
+        // Toggle thème
+        const toggles = [document.getElementById('theme-toggle'), document.getElementById('mobile-theme-toggle')];
+        toggles.forEach(t => {
+            t?.addEventListener('click', () => document.body.classList.toggle('dark-mode'));
+        });
+
+        // Color picker sync
+        const pickers = [document.getElementById('color-picker'), document.getElementById('mobile-color')];
+        pickers.forEach(p => {
+            p?.addEventListener('input', e => {
+                document.documentElement.style.setProperty('--primary-color', e.target.value);
+                pickers.forEach(el => { if (el) el.value = e.target.value; });
+            });
+        });
+
+        // Scroll reveal
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.12 });
+
+        document.querySelectorAll('.animate-in').forEach(el => observer.observe(el));
+        document.querySelector('.hero-content').classList.add('visible');
+    </script>
 </body>
 </html>
